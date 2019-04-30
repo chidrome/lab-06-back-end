@@ -127,3 +127,18 @@ $(() => {
   GEOCODE_API_KEY = getKey();
   if (GEOCODE_API_KEY) { $('#geocode-form').addClass('hide'); }
 });
+
+
+
+//constructor functions
+function SearchLocation(locationName, formatted_query, lat, lng) {
+  this.search_query = locationName;
+  this.formatted_query = formatted_query;
+  this.latitude = lat;
+  this.longitutde = lng;
+}
+
+function SearchWeather(forecast, time){
+  this.forecast = forecast;
+  this.time = time;
+}
