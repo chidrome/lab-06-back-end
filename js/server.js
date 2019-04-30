@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 });
 
 // location route
-app.get('/location', (req, res) => {
+app.get('https://lab-06-sudip.herokuapp.com/location', (req, res) => {
   try{
     let location = require('../data/geo.json');
     console.log(location.results);
@@ -30,7 +30,7 @@ app.get('/location', (req, res) => {
 });
 
 // weather route
-app.get('/weather', (req, res) => {
+app.get('https://lab-06-sudip.herokuapp.com/weather', (req, res) => {
   try{
     let weather = require('../data/darksky.json');
     let dailyForecast = [];
