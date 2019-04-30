@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
   res.send('STUB ROUTE');
 });
 
-// searh route
+// location route
 app.get('/location', (req, res) => {
   try{
     let location = require('../data/geo.json');
@@ -24,21 +24,25 @@ app.get('/location', (req, res) => {
     let newLocation = new SearchLocation('seattle', 'Seattle, WA, USA', location.results[0].geometry.location.lat, location.results[0].geometry.location.lng);
     res.send(newLocation);
   }catch(error) {
+    res.send(errorHandling(500, 'Something went wrong with getting the location'));
     console.log(`There's been an ERRRRRRRRRRor getting your location! ${error}`);
   }
 });
 
-// app.get('/sudip', (req, res) => {
-//     require('../data/geo.json');
-//   .then((results) => {
-
-//   })
-//     res.send(location);
-//   }catch(error) {
-//     console.log(`There's been an ERRRRRRRRRRor getting your location! ${error}`);
-//   }
-// });
-
+// weather route
+app.get('/weather', (req, res) => {
+  try{
+    let weather = require('../data/darksky.json');
+    let dailyForecast = [];
+    weather.daily.data.forEach((element) => {
+      dailyForecast.push(new SearchWeather(element.summary, element.time));
+    });
+    res.send(dailyForecast);
+  } catch(error) {
+    res.send(errorHandling(500, 'Something went wrong with getting the weather'));
+    console.log(`There's been an ERRRRRRRRRRor getting your weather! ${error}`);
+  }
+});
 
 // Setup listener
 app.listen(process.env.PORT || 8000, function(){
@@ -46,8 +50,7 @@ app.listen(process.env.PORT || 8000, function(){
 });
 
 
-//helper functions
-
+//constructor functions
 function SearchLocation(locationName, formatted_query, lat, lng) {
   this.search_query = locationName;
   this.formatted_query = formatted_query;
@@ -55,3 +58,16 @@ function SearchLocation(locationName, formatted_query, lat, lng) {
   this.longitutde = lng;
 }
 
+function SearchWeather(forecast, time){
+  this.forecast = forecast;
+  this.time = time;
+}
+
+// error handling function
+const errorHandling = (status, responseText) => {
+  let errorObj = {
+    status: status,
+    responseText: responseText
+  };
+  return errorObj;
+};
