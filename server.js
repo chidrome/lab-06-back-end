@@ -3,10 +3,12 @@ require('dotenv').config();
 
 // Load requires
 const express = require('express');
+const cors = require('cors');
 
 
 // Declare express app
 const app = express();
+app.use(cors());
 
 
 
@@ -19,7 +21,7 @@ app.get('/', (req, res) => {
 // location route
 app.get('/location', (req, res) => {
   try{
-    let location = require('../data/geo.json');
+    let location = require('./data/geo.json');
     console.log(location.results);
     let newLocation = new SearchLocation('seattle', 'Seattle, WA, USA', location.results[0].geometry.location.lat, location.results[0].geometry.location.lng);
     res.send(newLocation);
@@ -32,7 +34,7 @@ app.get('/location', (req, res) => {
 // weather route
 app.get('/weather', (req, res) => {
   try{
-    let weather = require('../data/darksky.json');
+    let weather = require('./data/darksky.json');
     let dailyForecast = [];
     weather.daily.data.forEach((element) => {
       dailyForecast.push(new SearchWeather(element.summary, element.time));
